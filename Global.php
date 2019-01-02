@@ -16,6 +16,18 @@ function isPhone($phone){
 }
 
 /**
+ * 隐藏手机号
+ * hidePhone
+ * @param string $phone
+ * @param int $start
+ * @param int $length
+ * @return mixed
+ */
+function hidePhone($phone, $start=3, $length=4){
+    return substr_replace($phone, '****', $start, $length);
+}
+
+/**
  * 判断是不是手机访问
  * @return bool
  */
