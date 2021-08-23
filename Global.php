@@ -7,6 +7,44 @@
  */
 
 /**
+ * 数组转yaconf配置文件
+ * arr2ini
+ * @param array  $config
+ * @param string $parent
+ * @param int    $level
+ * @return string
+ */
+function arr2ini(array $config, $parent = '',$level=0){
+    $out = '';
+    foreach ($config as $key => $value) {
+        if (is_array($value)) {
+            $level++;
+            if($level==0){
+                $out .= '[' . $key . ']' . PHP_EOL;
+                $sec='';
+            }else{
+                if(empty($parent)){
+                    $sec = $key.'.';
+                }else{
+                    $sec = $parent.$key.'.';
+                }
+            }
+            $out .= arr2ini($value, $sec,$level);
+        } else {
+            if(is_numeric($value)){
+                $out .= $parent."$key=$value" . PHP_EOL;
+            }elseif(is_bool($value)){
+                $out .= $parent."$key=".($value?1:0) . PHP_EOL;
+            }else{
+                $out .= $parent."$key='$value'" . PHP_EOL;
+            }
+            $level=0;
+        }
+    }
+    return $out;
+}
+
+/**
  * 判断是不是手机
  * @param string $phone
  * @return false|int
